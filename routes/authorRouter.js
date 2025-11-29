@@ -1,13 +1,19 @@
 import express from "express";
+import {
+  createAuthor,
+  getAllAuthors,
+  getAuthorById,
+  getBooksByAuthorId,
+} from "../controllers/authorController.js";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.status(200).json([
-    { id: 1, name: "Daniel Gerhard Brown" },
-    { id: 2, name: "William Shakespeare" },
-  ]);
-});
+router.get("/", getAllAuthors);
 
+router.get("/:id", getAuthorById);
+
+router.get("/:id/books", getBooksByAuthorId);
+
+router.post("/", createAuthor);
 
 export default router;

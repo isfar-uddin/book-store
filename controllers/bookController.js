@@ -1,10 +1,23 @@
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { booksTable } from "../models/bookModel.js";
 import { db } from "../db/index.js";
+import { authorsTable } from "../models/authorModel.js";
 
-export const getAllBooks = async (_, res) => {
+export const getAllBooks = async (req, res) => {
+  const { search } = req.query;
+
+  if (search) {
+    const books = await db
+      .select()
+      .from(booksTable)
+      .where(
+        sql`to_tsvector('english', ${booksTable.title}) @@ to_tsquery('english', ${search})`
+      );
+
+    return res.status(200).json(books);
+  }
+
   const books = await db.select().from(booksTable);
-  console.log(books);
   return res.status(200).json(books);
 };
 
@@ -15,6 +28,7 @@ export const getBookById = async (req, res) => {
     .select()
     .from(booksTable)
     .where((table) => eq(table.id, id))
+    .leftJoin(authorsTable, eq(booksTable.authorId, authorsTable.id))
     .limit(1);
 
   if (!book) {

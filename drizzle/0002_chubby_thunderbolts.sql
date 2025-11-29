@@ -1,0 +1,1 @@
+CREATE INDEX "author_search_index" ON "authors" USING gin (to_tsvector('english', "firstName" || ' ' || COALESCE("lastName", '')));
