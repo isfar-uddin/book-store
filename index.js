@@ -1,6 +1,7 @@
 import express from "express";
 import bookRouter from "./routes/bookRouter.js";
 import authorRouter from "./routes/authorRouter.js";
+import authRouter from "./playground/sessionAuth/auth.js";
 import { loggerMiddleware } from "./middlewares/logger.js";
 
 const app = express();
@@ -17,6 +18,8 @@ app.get("/", (req, res) => {
 app.use("/books", bookRouter);
 
 app.use("/authors", authorRouter);
+
+app.use("/session/auth", authRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
