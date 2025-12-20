@@ -109,3 +109,7 @@
 [1766226570838] POST /session/auth/login
 [1766226664581] POST /session/auth/login
 [1766226685665] POST /session/auth/login
+[1766236694858] POST /session/auth/user
+[1766236703095] GET /session/auth/user
+[1766236720590] GET /session/auth/user
+[1766236732664] GET /session/auth/user

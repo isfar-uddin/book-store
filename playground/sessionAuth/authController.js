@@ -67,10 +67,18 @@ export const loginUser = async (req, res) => {
     })
     .returning({ sessionId: usersSession.id });
 
-  return res
-    .status(200)
-    .json({
-      message: "User logged in successfully.",
-      sessionId: session.sessionId,
-    });
+  return res.status(200).json({
+    message: "User logged in successfully.",
+    sessionId: session.sessionId,
+  });
+};
+
+export const getUserInfo = async (req, res) => {
+  const { user } = req;
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  return res.status(200).json({ user });
 };
