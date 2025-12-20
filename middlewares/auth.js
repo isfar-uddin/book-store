@@ -13,14 +13,14 @@ export const isAuthorized = async (req, res, next) => {
 
   const [data] = await db
     .select({
-      id: usersSession.id,
+      sessionId: usersSession.id,
       userId: usersSession.userId,
       name: usersTable.name,
       email: usersTable.email,
     })
     .from(usersSession)
     .rightJoin(usersTable, eq(usersTable.id, usersSession.userId))
-    .where((table) => eq(table.id, sessionId));
+    .where((table) => eq(table.sessionId, sessionId));
 
   if (!data) {
     return res.status(401).json({

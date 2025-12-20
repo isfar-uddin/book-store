@@ -82,3 +82,15 @@ export const getUserInfo = async (req, res) => {
 
   return res.status(200).json({ user });
 };
+
+export const updateUser = async (req, res) => {
+  const { user, body } = req;
+  const { name } = body;
+
+  await db
+    .update(usersTable)
+    .set({ name })
+    .where(eq(usersTable.id, user.userId));
+
+  return res.status(200).json({ message: "Updated successfully." });
+};
