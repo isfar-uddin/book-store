@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import bookRouter from "./routes/bookRouter.js";
 import authorRouter from "./routes/authorRouter.js";
@@ -5,7 +6,7 @@ import authRouter from "./playground/sessionAuth/authRouter.js";
 import { loggerMiddleware } from "./middlewares/logger.js";
 
 const app = express();
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 app.use(express.json());
 
