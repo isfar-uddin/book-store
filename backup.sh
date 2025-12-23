@@ -1,25 +1,29 @@
 #!/bin/bash
+# Quick backup to GitHub
 
-# Configuration
-BACKUP_DIR="./backups"
-CONTAINER_NAME="book-store-postgres-1"
-DB_USER="postgres"
-DB_NAME="book-store"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-BACKUP_FILE="${BACKUP_DIR}/backup_${TIMESTAMP}.sql"
+BACKUP_FILE="backup_${TIMESTAMP}.sql.gz"
 
-# Create backup directory if it doesn't exist
-mkdir -p ${BACKUP_DIR}
+# Backup and compress
+docker exec book-store-postgres-1 pg_dump -U postgres -d book-store --clean --if-exists | gzip > ../book-store-backups/${BACKUP_FILE}
 
-# Create backup
-echo "Creating backup: ${BACKUP_FILE}"
-docker exec ${CONTAINER_NAME} pg_dump -U ${DB_USER} -d ${DB_NAME} > ${BACKUP_FILE}
+# Push to GitHub
+cd ../book-store-backups
+git add ${BACKUP_FILE}
+git commit -m "Backup ${TIMESTAMP}"
 
-# Compress the backup
-gzip ${BACKUP_FILE}
+# Cleanup: Keep only last 7 backups
+echo "🧹 Cleaning up old backups..."
+ls -t backup_*.sql.gz | tail -n +8 | xargs -r rm
 
-echo "Backup completed: ${BACKUP_FILE}.gz"
+# Commit deletions if any files were removed
+if [ -n "$(git status --porcelain)" ]; then
+    git add .
+    git commit -m "Cleanup: Keep last 7 backups"
+fi
 
-# Optional: Keep only last 7 backups
-find ${BACKUP_DIR} -name "backup_*.sql.gz" -type f -mtime +7 -delete
-echo "Old backups cleaned up (kept last 7 days)"
+# Push all changes
+git push origin main
+
+echo "✅ Backup uploaded to GitHub!"
+echo "📦 Keeping 7 most recent backups"
