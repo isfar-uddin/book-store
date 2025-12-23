@@ -46,19 +46,19 @@ export const getBooksByAuthorId = async (req, res) => {
 };
 
 export const createAuthor = async (req, res) => {
-  const { firstName, lastName, email } = req.body;
+  const { firstName, lastName, email, country } = req.body;
 
   if (!firstName) {
     return res.status(400).json({ error: "FirstName is required." });
   }
 
-  if (!email) {
-    return res.status(400).json({ error: "email is required." });
+  if (!country) {
+    return res.status(400).json({ error: "country of the author is required." });
   }
 
   const [result] = await db
     .insert(authorsTable)
-    .values({ firstName, lastName, email })
+    .values({ firstName, lastName, email, country })
     .returning({ id: authorsTable.id });
 
   return res

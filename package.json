@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node --watch index.js",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "db:backup": "./backup.sh",
+    "db:restore": "./restore.sh"
   },
   "author": "isfarruett@gmail.com",
   "license": "ISC",
