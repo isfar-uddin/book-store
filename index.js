@@ -2,7 +2,8 @@ import "dotenv/config";
 import express from "express";
 import bookRouter from "./routes/bookRouter.js";
 import authorRouter from "./routes/authorRouter.js";
-import authRouter from "./playground/sessionAuth/authRouter.js";
+import authRouter from "./routes/authRouter.js";
+import sessionAuthRouter from "./playground/sessionAuth/authRouter.js";
 import { loggerMiddleware } from "./middlewares/logger.js";
 
 const app = express();
@@ -20,7 +21,8 @@ app.use("/books", bookRouter);
 
 app.use("/authors", authorRouter);
 
-app.use("/session/auth", authRouter);
+app.use("/auth", authRouter);
+app.use("/session/auth", sessionAuthRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

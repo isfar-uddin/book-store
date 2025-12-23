@@ -1,30 +1,41 @@
 import { eq } from "drizzle-orm";
 import { db } from "../db/index.js";
 import { usersSession, usersTable } from "../models/userModel.js";
+import jwt from "jsonwebtoken";
 
 export const isAuthorized = async (req, res, next) => {
-  const sessionId = req.headers["session-id"];
+  const tokenHeader = req.headers["authorization"];
 
-  if (!sessionId) {
+  if (!tokenHeader) {
     return res.status(401).json({
-      error: "Unauthorized. No session token provided",
+      error: "Unauthorized. No token provided",
     });
   }
 
+  if (!tokenHeader.startsWith("Bearer")) {
+    return res.status(400).json({
+      error: "Authorization token must start with Bearer",
+    });
+  }
+
+  const token = tokenHeader.split(" ")[1];
+
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+  console.log("decoded", decodedToken);
+
   const [data] = await db
     .select({
-      sessionId: usersSession.id,
-      userId: usersSession.userId,
+      id: usersTable.id,
       name: usersTable.name,
       email: usersTable.email,
     })
-    .from(usersSession)
-    .rightJoin(usersTable, eq(usersTable.id, usersSession.userId))
-    .where((table) => eq(table.sessionId, sessionId));
+    .from(usersTable)
+    .where((table) => eq(table.id, decodedToken.id));
 
   if (!data) {
     return res.status(401).json({
-      error: "Invalid session",
+      error: "Invalid token",
     });
   }
 
