@@ -80,25 +80,3 @@ export const loginUser = async (req, res) => {
     token,
   });
 };
-
-export const getUserInfo = async (req, res) => {
-  const { user } = req;
-
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  }
-
-  return res.status(200).json({ user });
-};
-
-export const updateUser = async (req, res) => {
-  const { user, body } = req;
-  const { name } = body;
-
-  await db
-    .update(usersTable)
-    .set({ name })
-    .where(eq(usersTable.id, user.userId));
-
-  return res.status(200).json({ message: "Updated successfully." });
-};

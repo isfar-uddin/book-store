@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { randomBytes, createHmac } from "node:crypto";
+import { createHmac } from "node:crypto";
 import { usersSession, usersTable } from "../../models/userModel.js";
 import { db } from "./../../db/index.js";
 
@@ -41,4 +41,26 @@ export const loginUser = async (req, res) => {
     message: "User logged in successfully.",
     sessionId: session.sessionId,
   });
+};
+
+export const getUserInfo = async (req, res) => {
+  const { user } = req;
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  return res.status(200).json({ user });
+};
+
+export const updateUser = async (req, res) => {
+  const { user, body } = req;
+  const { name } = body;
+
+  await db
+    .update(usersTable)
+    .set({ name })
+    .where(eq(usersTable.id, user.userId));
+
+  return res.status(200).json({ message: "Updated successfully." });
 };
