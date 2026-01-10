@@ -6,6 +6,7 @@ import userRouter from "./routes/userRouter.js";
 import bookRouter from "./routes/bookRouter.js";
 import authorRouter from "./routes/authorRouter.js";
 import { loggerMiddleware } from "./middlewares/logger.js";
+import { authenticationMiddleware } from "./middlewares/authMiddleware.js";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -20,6 +21,8 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authRouter);
 app.use("/session/auth", sessionAuthRouter);
+
+app.use(authenticationMiddleware);
 
 app.use("/users", userRouter);
 

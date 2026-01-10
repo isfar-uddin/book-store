@@ -17,6 +17,7 @@ export const isAuthorized = async (req, res, next) => {
       userId: usersSession.userId,
       name: usersTable.name,
       email: usersTable.email,
+      role: usersTable.role,
     })
     .from(usersSession)
     .rightJoin(usersTable, eq(usersTable.id, usersSession.userId))

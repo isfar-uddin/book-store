@@ -37,10 +37,14 @@ export const signupUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
+  console.log(email, password);
+
   const [existingUser] = await db
     .select({
       id: usersTable.id,
+      name: usersTable.name,
       email: usersTable.email,
+      role: usersTable.role,
       password: usersTable.password,
       salt: usersTable.salt,
     })
@@ -57,6 +61,7 @@ export const loginUser = async (req, res) => {
     password: existingPassword,
     email: existingEmail,
     name,
+    role,
   } = existingUser;
 
   const hashedPassword = createHmac("sha256", salt)
@@ -69,8 +74,9 @@ export const loginUser = async (req, res) => {
 
   const payload = {
     id,
-    existingEmail,
+    email: existingEmail,
     name,
+    role,
   };
 
   const token = jwt.sign(payload, process.env.JWT_SECRET);

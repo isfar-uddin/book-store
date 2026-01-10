@@ -16,7 +16,6 @@ export const getAllUsers = async (req, res) => {
 };
 
 export const getUserById = async (req, res) => {
-  console.log(req.params)
   const { id } = req.params;
 
   const [user] = await db
@@ -24,6 +23,7 @@ export const getUserById = async (req, res) => {
       id: usersTable.id,
       email: usersTable.email,
       name: usersTable.name,
+      role: usersTable.role,
     })
     .from(usersTable)
     .where((table) => eq(table.id, id));

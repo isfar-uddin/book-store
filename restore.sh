@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configuration
-BACKUP_DIR="./backups"
+BACKUP_DIR="../book-store-backups"
 CONTAINER_NAME="book-store-postgres-1"
 DB_USER="postgres"
 DB_NAME="book-store"
