@@ -7,6 +7,8 @@ const router = express.Router();
 
 const adminRestrictMiddleware = restrictToRole(ROLES.ADMIN);
 
-router.get("/users", adminRestrictMiddleware, getAllUsers);
+router.use(adminRestrictMiddleware);
+
+router.get("/users", getAllUsers);
 
 export default router;
