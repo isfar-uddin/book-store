@@ -37,8 +37,6 @@ export const signupUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
-  console.log(email, password);
-
   const [existingUser] = await db
     .select({
       id: usersTable.id,

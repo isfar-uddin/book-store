@@ -239,3 +239,13 @@
 [1768035844850] POST /auth/login
 [1768036350525] POST /auth/login
 [1768036451570] POST /auth/login
+[1768324941548] GET /admin/users
+[1768325900857] POST /auth/login
+[1768325918982] GET /admin/users
+[1768325966021] GET /admin/users
+[1768325992016] GET /admin/users
+[1768326049129] GET /admin/users
+[1768326077430] GET /admin/users
+[1768326270145] GET /admin/users
+[1768326284151] POST /auth/login
+[1768326296806] GET /admin/users

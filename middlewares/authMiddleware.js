@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { verifyToken } from "../utils/verifyToken.js";
 
 export const authenticationMiddleware = async (req, res, next) => {
   const tokenHeader = req.headers["authorization"];
@@ -15,15 +16,34 @@ export const authenticationMiddleware = async (req, res, next) => {
     });
   }
 
-  try {
-    const token = tokenHeader.split(" ")[1];
+  const { error } = verifyToken(tokenHeader);
 
-    jwt.verify(token, process.env.JWT_SECRET);
-
-    next();
-  } catch (error) {
+  if (error) {
     return res.status(401).json({
       error: "Invalid token",
     });
   }
+
+  next();
+};
+
+export const restrictToRole = function (role) {
+  return function (req, res, next) {
+    const tokenHeader = req.headers["authorization"];
+    const { token, error } = verifyToken(tokenHeader);
+
+    if (error) {
+      return res.status(401).json({
+        error: "Invalid token",
+      });
+    }
+
+    if (token.role !== role) {
+      return res
+        .status(401)
+        .json({ error: "You are not authorized to access this resource." });
+    }
+
+    next();
+  };
 };

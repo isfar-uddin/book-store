@@ -7,7 +7,11 @@ import {
   pgEnum,
 } from "drizzle-orm/pg-core";
 
-export const userRoleEnum = pgEnum("role", ["user", "admin"]);
+import { ROLES } from "../constants/index.js";
+
+const { USER, ADMIN } = ROLES;
+
+export const userRoleEnum = pgEnum("role", [USER, ADMIN]);
 
 // Session based authentication system
 export const usersTable = pgTable("users", {
